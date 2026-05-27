@@ -1,5 +1,4 @@
 # Open-Meteo Weather CLI
-
 A Python command-line tool that fetches real-time weather data for any location on Earth.
 
 ## Features
@@ -13,14 +12,18 @@ A Python command-line tool that fetches real-time weather data for any location 
 ## Usage
 
 Default (your current location):
+```
 py open_meteo.py
-
+```
 Custom location:
+```
 py open_meteo.py \<latitude\> \<longitude\>
-
+```
 Examples:
+```
 py open_meteo.py 78.2232 15.6267
 py open_meteo.py -33.8688 151.2093
+```
 
 ## Requirements
 - Python 3
