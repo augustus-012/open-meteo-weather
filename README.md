@@ -19,8 +19,7 @@ Custom location:
 py open_meteo.py \<latitude\> \<longitude\>
 
 Examples:
-py open_meteo.py 78.2232 15.6267
-py open_meteo.py -33.8688 151.2093
+py open_meteo.py 78.2232 15.6267\npy open_meteo.py -33.8688 151.2093
 
 ## Requirements
 - Python 3
