@@ -8,17 +8,18 @@ def get_location():
     url = "https://api.bigdatacloud.net/data/reverse-geocode-client?" if len(sys.argv) != 3 else f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={sys.argv[1]}&longitude={sys.argv[2]}"
 
     response = requests.get(url)
+    response.raise_for_status()
 
     data = response.json()
     latitude = data["latitude"] # set latitude
     longitude = data["longitude"] # set longitude
 
-    return data["city"] or data["locality"]
+    return data["city"] or data["locality"] or "Unknown"
 
 def main():
-    city = get_location()
-
     try:
+        city = get_location()
+
         url = "https://api.open-meteo.com/v1/forecast?"
         params = {
             "latitude": latitude,
