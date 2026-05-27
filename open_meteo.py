@@ -1,16 +1,22 @@
 import requests
 from requests.exceptions import HTTPError
-from pprint import pprint
 import sys
 
-latitude = 6.6137 # default
-longitude = 3.3553 # default
+def get_location():
+    global latitude, longitude
+
+    url = "https://api.bigdatacloud.net/data/reverse-geocode-client?" if len(sys.argv) != 3 else f"https://api.bigdatacloud.net/data/reverse-geocode-client?latitude={sys.argv[1]}&longitude={sys.argv[2]}"
+
+    response = requests.get(url)
+
+    data = response.json()
+    latitude = data["latitude"] # set latitude
+    longitude = data["longitude"] # set longitude
+
+    return data["city"] or data["locality"]
 
 def main():
-    global latitude, longitude
-    if len(sys.argv) == 3:
-        latitude = float(sys.argv[1])
-        longitude = float(sys.argv[2])
+    city = get_location()
 
     try:
         url = "https://api.open-meteo.com/v1/forecast?"
@@ -41,9 +47,6 @@ def main():
         current_units = data["current_units"]
         hourly = data["hourly"]
 
-        # location
-        place = data["timezone"].split("/")[1]
-
         # current variables
         time_of_day = "Day" if current["is_day"] else "Night"
         sea_level_pressure = f"{current['pressure_msl']} {current_units['pressure_msl']}"
@@ -65,7 +68,7 @@ def main():
         value_len = 16
         line_len = title_len + value_len
         print("\n")
-        print(f" THE WEATHER IN {place.upper()} ".center(line_len, "="))
+        print(f" THE WEATHER IN {city.upper()} ".center(line_len, "="))
         print("\n")
         print(" CURRENT WEATHER CONDITION ".center(line_len, "-"))
         print(f"{'Time of day:'.ljust(title_len)}{time_of_day.ljust(value_len)}")
@@ -91,7 +94,7 @@ def main():
         value_len -= 10
         line_len = title_len + value_len
         print("\n")
-        print(f" HOURLY TEMPERATURES TODAY IN {place.upper()} ".center(line_len, "-"))
+        print(f" HOURLY TEMPERATURES TODAY IN {city.upper()} ".center(line_len, "-"))
         for _time, _temp in zip(hourly_times, hourly_temperatures_today):
             print(f"{_time.ljust(title_len)}{_temp.ljust(value_len)}")
             print(f"{"-"*line_len}")
@@ -100,18 +103,14 @@ def main():
         value_len += 16
         line_len = title_len + value_len
         print("\n")
-        print(f" HOURLY WEATHER DESCRIPTIONS TODAY IN {place.upper()} ".center(line_len, "-"))
+        print(f" HOURLY WEATHER DESCRIPTIONS TODAY IN {city.upper()} ".center(line_len, "-"))
         for time_, desc in zip(hourly_times, hourly_weather_descriptions):
             print(f"{time_.ljust(title_len)}{desc.ljust(value_len)}")
-            print(f"{"-"*line_len}")
-        
-        #pprint(data)
+            print(f"{"-"*line_len}") 
     except HTTPError as http_err:
         print(f"Error: {http_err}")
     except Exception as err:
         print(f"Other error occured: {err}")
-    else:
-        print("Success!")
 
 
 
