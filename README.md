@@ -13,7 +13,7 @@ Default (Lagos):
 py open_meteo.py
 
 Custom location:
-py open_meteo.py <latitude> <longitude>
+py open_meteo.py \<latitude\> \<longitude\>
 
 Example (Tripoli):
 py open_meteo.py 31.0194 15.7381
