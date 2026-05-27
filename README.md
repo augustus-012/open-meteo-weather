@@ -17,7 +17,7 @@ py open_meteo.py
 ```
 Custom location:
 ```
-py open_meteo.py \<latitude\> \<longitude\>
+py open_meteo.py <latitude> <longitude>
 ```
 Examples:
 ```
